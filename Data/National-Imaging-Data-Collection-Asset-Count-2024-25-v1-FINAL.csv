@@ -1,0 +1,151 @@
+﻿,,,,,,,,,,,,,,,,,,
+,Title:,National Imaging Data Collection - Asset count,,,,,,,,,,,,,,,,
+,Summary:,The count of imaging assets,,,,,,,,,,,,,,,,
+,Period:,31/03/2025,,,,,,,,,,,,,,,,
+,Source:,National Imaging Data Collection,,,,,,,,,,,,,,,,
+,Basis:,"England, region and organisation",,,,,,,,,,,,,,,,
+,Published:,12th February 2026,,,,,,,,,,,,,,,,
+,Status:,Published,,,,,,,,,,,,,,,,
+,Contact:,england.imageservices@nhs.net,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,"By ICB, Imaging Networks and Trusts",,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,Region Code,Region,ICB - Integrated Care Board,Imaging Network,Organisation Code,Organisation Name, Total , MRI , CT , Ultrasound , X-Ray , Mammography , Interventional Radiology , Fluoroscopy , Nuclear Medicine , DEXA , Dental , Catheter Lab 
+,Y56,London,NHS North Central London ICB,North Central London   ,RAL,Royal Free London NHS Foundation Trust,142 ,11 ,10 ,45 ,27 ,5 ,8 ,20 ,7 ,2 ,7 ,
+,Y56,London,NHS North Central London ICB,North Central London   ,RAN,Royal National Orthopaedic Hospital NHS Trust,30 ,2 ,1 ,4 ,10 ,,,11 ,1 ,1 ,,
+,Y56,London,NHS North Central London ICB,North Central London   ,RAP,North Middlesex University Hospital NHS Trust,46 ,2 ,3 ,22 ,10 ,1 ,3 ,3 ,1 ,0 ,1 ,
+,Y56,London,NHS North Central London ICB,North Central London   ,RKE,Whittington Health NHS Trust,58 ,3 ,3 ,29 ,10 ,2 ,1 ,7 ,1 ,1 ,1 ,
+,Y56,London,NHS North Central London ICB,North Central London   ,RP4,Great Ormond Street Hospital for Children NHS Foundation Trust,41 ,6 ,1 ,13 ,5 ,,3 ,7 ,3 ,1 ,2 ,
+,Y56,London,NHS North Central London ICB,North Central London   ,RP6,Moorfields Eye Hospital NHS Foundation Trust,27 ,,1 ,23 ,2 ,,,1 ,,,,
+,Y56,London,NHS North Central London ICB,North Central London   ,RRV,University College London Hospitals NHS Foundation Trust,134 ,10 ,9 ,35 ,27 ,6 ,6 ,22 ,8 ,1 ,10 ,
+,Y56,London,NHS North East London ICB,North East London,R1H,Barts Health NHS Trust,253 ,9 ,12 ,103 ,65 ,12 ,2 ,38 ,7 ,1 ,4 ,
+,Y56,London,NHS North East London ICB,North East London,RF4,"Barking, Havering and Redbridge University Hospitals NHS Trust",102 ,7 ,8 ,36 ,22 ,2 ,2 ,15 ,3 ,1 ,6 ,
+,Y56,London,NHS North East London ICB,North East London,RQX,Homerton Healthcare NHS Foundation Trust,41 ,2 ,2 ,15 ,11 ,1 ,,6 ,,1 ,3 ,
+,Y56,London,NHS North West London ICB,North West London,R1K,London North West University Healthcare NHS Trust,122 ,8 ,9 ,49 ,26 ,4 ,3 ,11 ,3 ,2 ,5 ,2 
+,Y56,London,NHS North West London ICB,North West London,RAS,The Hillingdon Hospitals NHS Foundation Trust,69 ,2 ,2 ,31 ,15 ,3 ,3 ,11 ,1 ,,1 ,
+,Y56,London,NHS North West London ICB,North West London,RQM,Chelsea and Westminster Hospital NHS Foundation Trust,109 ,2 ,5 ,58 ,23 ,1 ,1 ,12 ,3 ,1 ,2 ,1 
+,Y56,London,NHS North West London ICB,North West London,RYJ,Imperial College Healthcare NHS Trust,130 ,12 ,9 ,44 ,35 ,0 ,7 ,17 ,4 ,1 ,1 ,
+,Y56,London,NHS South East London ICB,South East London,RJ1,Guy's and St Thomas' NHS Foundation Trust,150 ,16 ,14 ,27 ,44 ,2 ,6 ,22 ,10 ,5 ,,4 
+,Y56,London,NHS South East London ICB,South East London,RJ2,Lewisham and Greenwich NHS Trust,73 ,3 ,4 ,29 ,20 ,2 ,1 ,10 ,1 ,2 ,1 ,
+,Y56,London,NHS South East London ICB,South East London,RJZ,King's College Hospital NHS Foundation Trust,196 ,7 ,7 ,41 ,38 ,20 ,6 ,21 ,3 ,2 ,51 ,
+,Y56,London,NHS South East London ICB,South East London,RV5,South London and Maudsley NHS Foundation Trust,1 ,1 ,,,,,,,,,,
+,Y56,London,NHS South West London ICB,South West London ,RAX,Kingston and Richmond NHS Foundation Trust,57 ,3 ,4 ,21 ,12 ,2 ,,4 ,2 ,1 ,7 ,1 
+,Y56,London,NHS South West London ICB,South West London ,RJ6,Croydon Health Services NHS Trust,45 ,3 ,3 ,16 ,12 ,1 ,1 ,6 ,,1 ,2 ,
+,Y56,London,NHS South West London ICB,South West London ,RJ7,St George's University Hospitals NHS Foundation Trust,151 ,5 ,5 ,59 ,23 ,12 ,2 ,31 ,4 ,2 ,8 ,
+,Y56,London,NHS South West London ICB,South West London ,RPY,The Royal Marsden NHS Foundation Trust,53 ,8 ,5 ,10 ,8 ,6 ,1 ,6 ,6 ,1 ,2 ,
+,Y56,London,NHS South West London ICB,South West London ,RVR,Epsom and St Helier University Hospitals NHS Trust,66 ,4 ,5 ,20 ,19 ,,4 ,6 ,1 ,1 ,6 ,
+,Y58,South West,"NHS Bath and North East Somerset, Swindon and Wiltshire ICB",West of England ,RD1,Royal United Hospitals Bath NHS Foundation Trust,61 ,3 ,4 ,18 ,22 ,3 ,1 ,7 ,1 ,,,2 
+,Y58,South West,"NHS Bath and North East Somerset, Swindon and Wiltshire ICB",West of England ,RN3,Great Western Hospitals NHS Foundation Trust,52 ,3 ,6 ,15 ,13 ,7 ,,6 ,1 ,1 ,,
+,Y58,South West,"NHS Bath and North East Somerset, Swindon and Wiltshire ICB",West of England ,RNZ,Salisbury NHS Foundation Trust,59 ,3 ,3 ,18 ,15 ,2 ,,10 ,1 ,1 ,4 ,2 
+,Y58,South West,"NHS Bristol, North Somerset and South Gloucestershire ICB",West of England ,RA7,University Hospitals Bristol and Weston NHS Foundation Trust,126 ,8 ,10 ,37 ,31 ,1 ,1 ,18 ,2 ,2 ,9 ,7 
+,Y58,South West,"NHS Bristol, North Somerset and South Gloucestershire ICB",West of England ,RVJ,North Bristol NHS Trust,74 ,7 ,6 ,16 ,23 ,5 ,4 ,10 ,3 ,,,
+,Y58,South West,NHS Cornwall and The Isles of Scilly ICB,Peninsula,REF,Royal Cornwall Hospitals NHS Trust,112 ,5 ,6 ,43 ,30 ,5 ,2 ,10 ,3 ,2 ,4 ,2 
+,Y58,South West,NHS Devon ICB,Peninsula,RA9,Torbay and South Devon NHS Foundation Trust,52 ,2 ,3 ,15 ,13 ,3 ,1 ,8 ,1 ,1 ,3 ,2 
+,Y58,South West,NHS Devon ICB,Peninsula,RH8,Royal Devon University Healthcare NHS Foundation Trust,103 ,4 ,6 ,27 ,36 ,1 ,3 ,17 ,2 ,2 ,5 ,
+,Y58,South West,NHS Devon ICB,Peninsula,RK9,University Hospitals Plymouth NHS Trust,126 ,9 ,11 ,36 ,25 ,7 ,3 ,20 ,5 ,2 ,4 ,4 
+,Y58,South West,NHS Dorset ICB,Wessex,R0D,University Hospitals Dorset NHS Foundation Trust,108 ,7 ,9 ,34 ,23 ,9 ,2 ,15 ,2 ,2 ,5 ,
+,Y58,South West,NHS Dorset ICB,Wessex,RBD,Dorset County Hospital NHS Foundation Trust,33 ,2 ,3 ,9 ,7 ,1 ,1 ,7 ,,1 ,2 ,
+,Y58,South West,NHS Gloucestershire ICB,West of England ,RTE,Gloucestershire Hospitals NHS Foundation Trust,100 ,4 ,8 ,29 ,28 ,6 ,4 ,11 ,3 ,2 ,3 ,2 
+,Y58,South West,NHS Somerset ICB,West of England ,RH5,Somerset NHS Foundation Trust,104 ,7 ,11 ,40 ,25 ,7 ,1 ,11 ,0 ,2 ,,
+,Y59,South East,"NHS Buckinghamshire, Oxfordshire and Berkshire West ICB",Thames Valley Radiology Network ,RHW,Royal Berkshire NHS Foundation Trust,64 ,3 ,6 ,17 ,25 ,2 ,2 ,7 ,,1 ,1 ,
+,Y59,South East,"NHS Buckinghamshire, Oxfordshire and Berkshire West ICB",Thames Valley Radiology Network ,RTH,Oxford University Hospitals NHS Foundation Trust,153 ,10 ,10 ,40 ,55 ,8 ,4 ,17 ,3 ,1 ,5 ,
+,Y59,South East,"NHS Buckinghamshire, Oxfordshire and Berkshire West ICB",Thames Valley Radiology Network ,RXQ,Buckinghamshire Healthcare NHS Trust,81 ,3 ,4 ,42 ,20 ,,1 ,7 ,1 ,1 ,2 ,
+,Y59,South East,NHS Frimley ICB,"Frimley, Surrey & Sussex ",RDU,Frimley Health NHS Foundation Trust,148 ,3 ,7 ,54 ,34 ,8 ,4 ,24 ,1 ,2 ,8 ,3 
+,Y59,South East,NHS Hampshire and Isle of Wight ICB,Wessex,R1F,Isle of Wight NHS Trust,33 ,2 ,3 ,9 ,10 ,3 ,,4 ,,1 ,1 ,
+,Y59,South East,NHS Hampshire and Isle of Wight ICB,Wessex,RHM,University Hospital Southampton NHS Foundation Trust,115 ,9 ,7 ,32 ,29 ,,5 ,20 ,3 ,3 ,3 ,4 
+,Y59,South East,NHS Hampshire and Isle of Wight ICB,Wessex,RHU,Portsmouth Hospitals University National Health Service Trust,86 ,6 ,7 ,28 ,26 ,5 ,2 ,8 ,4 ,,,
+,Y59,South East,NHS Hampshire and Isle of Wight ICB,Wessex,RN5,Hampshire Hospitals NHS Foundation Trust,67 ,5 ,5 ,14 ,23 ,2 ,2 ,10 ,1 ,1 ,2 ,2 
+,Y59,South East,NHS Hampshire and Isle of Wight ICB,Wessex,RW1,Hampshire and Isle of Wight Healthcare NHS Foundation Trust,13 ,1 ,1 ,4 ,4 ,,,2 ,,1 ,0 ,
+,Y59,South East,NHS Kent and Medway ICB,Kent & Medway ,RN7,Dartford and Gravesham NHS Trust,60 ,3 ,5 ,20 ,17 ,2 ,2 ,7 ,1 ,1 ,1 ,1 
+,Y59,South East,NHS Kent and Medway ICB,Kent & Medway ,RPA,Medway NHS Foundation Trust,48 ,3 ,2 ,7 ,16 ,7 ,0 ,7 ,3 ,1 ,2 ,
+,Y59,South East,NHS Kent and Medway ICB,Kent & Medway ,RVV,East Kent Hospitals University NHS Foundation Trust,126 ,7 ,7 ,33 ,31 ,5 ,3 ,28 ,3 ,2 ,4 ,3 
+,Y59,South East,NHS Kent and Medway ICB,Kent & Medway ,RWF,Maidstone and Tunbridge Wells NHS Trust,99 ,6 ,7 ,27 ,27 ,7 ,2 ,18 ,2 ,1 ,0 ,2 
+,Y59,South East,NHS Surrey Heartlands ICB,"Frimley, Surrey & Sussex ",RA2,Royal Surrey County Hospital NHS Foundation Trust,52 ,4 ,5 ,14 ,14 ,2 ,1 ,9 ,,,3 ,
+,Y59,South East,NHS Surrey Heartlands ICB,"Frimley, Surrey & Sussex ",RTK,Ashford and St Peter's Hospitals NHS Foundation Trust,64 ,5 ,4 ,19 ,17 ,2 ,1 ,11 ,,1 ,4 ,
+,Y59,South East,NHS Surrey Heartlands ICB,"Frimley, Surrey & Sussex ",RTP,Surrey and Sussex Healthcare NHS Trust,60 ,3 ,4 ,23 ,16 ,2 ,1 ,7 ,2 ,1 ,1 ,
+,Y59,South East,NHS Sussex ICB,"Frimley, Surrey & Sussex ",RPC,Queen Victoria Hospital NHS Foundation Trust,22 ,1 ,1 ,6 ,4 ,,1 ,3 ,,1 ,5 ,
+,Y59,South East,NHS Sussex ICB,"Frimley, Surrey & Sussex ",RXC,East Sussex Healthcare NHS Trust,72 ,5 ,5 ,27 ,14 ,6 ,2 ,8 ,1 ,,2 ,2 
+,Y59,South East,NHS Sussex ICB,"Frimley, Surrey & Sussex ",RYR,University Hospitals Sussex NHS Foundation Trust,171 ,11 ,15 ,51 ,41 ,,5 ,32 ,6 ,,7 ,3 
+,Y60,Midlands,NHS Birmingham and Solihull ICB,West Midlands,RQ3,Birmingham Women's and Children's NHS Foundation Trust,58 ,3 ,1 ,21 ,14 ,,1 ,12 ,2 ,,2 ,2 
+,Y60,Midlands,NHS Birmingham and Solihull ICB,West Midlands,RRJ,The Royal Orthopaedic Hospital NHS Foundation Trust,22 ,2 ,1 ,3 ,6 ,,,10 ,,,,
+,Y60,Midlands,NHS Birmingham and Solihull ICB,West Midlands,RRK,University Hospitals Birmingham NHS Foundation Trust,192 ,15 ,15 ,40 ,49 ,15 ,8 ,35 ,6 ,4 ,5 ,
+,Y60,Midlands,NHS Black Country ICB,West Midlands,RBK,Walsall Healthcare NHS Trust,45 ,2 ,5 ,15 ,13 ,,,7 ,1 ,,2 ,
+,Y60,Midlands,NHS Black Country ICB,West Midlands,RL4,The Royal Wolverhampton NHS Trust,74 ,5 ,6 ,25 ,23 ,2 ,2 ,8 ,1 ,,2 ,
+,Y60,Midlands,NHS Black Country ICB,West Midlands,RNA,The Dudley Group NHS Foundation Trust,95 ,3 ,4 ,56 ,13 ,6 ,2 ,7 ,2 ,,1 ,1 
+,Y60,Midlands,NHS Black Country ICB,West Midlands,RXK,Sandwell and West Birmingham Hospitals NHS Trust,113 ,5 ,6 ,57 ,19 ,8 ,1 ,9 ,3 ,1 ,2 ,2 
+,Y60,Midlands,NHS Coventry and Warwickshire ICB,West Midlands,RJC,South Warwickshire University NHS Foundation Trust,46 ,3 ,3 ,16 ,11 ,2 ,,5 ,,1 ,4 ,1 
+,Y60,Midlands,NHS Coventry and Warwickshire ICB,West Midlands,RKB,University Hospitals Coventry and Warwickshire NHS Trust,91 ,5 ,5 ,26 ,24 ,3 ,2 ,18 ,4 ,1 ,3 ,
+,Y60,Midlands,NHS Coventry and Warwickshire ICB,West Midlands,RLT,George Eliot Hospital NHS Trust,31 ,3 ,3 ,8 ,8 ,,1 ,5 ,,1 ,2 ,
+,Y60,Midlands,NHS Derby and Derbyshire ICB,East Midlands,RFS,Chesterfield Royal Hospital NHS Foundation Trust,44 ,2 ,3 ,13 ,16 ,3 ,1 ,3 ,1 ,1 ,,1 
+,Y60,Midlands,NHS Derby and Derbyshire ICB,East Midlands,RTG,University Hospitals of Derby and Burton NHS Foundation Trust,168 ,10 ,10 ,56 ,39 ,10 ,,32 ,4 ,2 ,5 ,
+,Y60,Midlands,NHS Herefordshire and Worcestershire ICB,West Midlands,RLQ,Wye Valley NHS Trust,46 ,4 ,4 ,18 ,9 ,2 ,1 ,5 ,1 ,1 ,1 ,
+,Y60,Midlands,NHS Herefordshire and Worcestershire ICB,West Midlands,RWP,Worcestershire Acute Hospitals NHS Trust,79 ,3 ,7 ,21 ,25 ,,4 ,9 ,1 ,0 ,7 ,2 
+,Y60,Midlands,"NHS Leicester, Leicestershire and Rutland ICB",East Midlands,RWE,University Hospitals of Leicester NHS Trust,217 ,9 ,13 ,87 ,49 ,12 ,2 ,25 ,6 ,,10 ,4 
+,Y60,Midlands,NHS Lincolnshire ICB,East Midlands,RWD,United Lincolnshire Teaching Hospitals NHS Trust,187 ,12 ,10 ,74 ,31 ,14 ,0 ,29 ,3 ,3 ,9 ,2 
+,Y60,Midlands,NHS Northamptonshire ICB,East Midlands,RNQ,Kettering General Hospital NHS Foundation Trust,42 ,3 ,3 ,12 ,9 ,4 ,2 ,4 ,1 ,,1 ,3 
+,Y60,Midlands,NHS Northamptonshire ICB,East Midlands,RNS,Northampton General Hospital NHS Trust,52 ,4 ,4 ,16 ,13 ,4 ,1 ,4 ,3 ,1 ,2 ,
+,Y60,Midlands,NHS Nottingham and Nottinghamshire ICB,East Midlands,RK5,Sherwood Forest Hospitals NHS Foundation Trust,68 ,5 ,5 ,22 ,15 ,4 ,0 ,9 ,1 ,1 ,4 ,2 
+,Y60,Midlands,NHS Nottingham and Nottinghamshire ICB,East Midlands,RX1,Nottingham University Hospitals NHS Trust,129 ,8 ,7 ,26 ,39 ,,6 ,29 ,4 ,4 ,6 ,
+,Y60,Midlands,"NHS Shropshire, Telford and Wrekin ICB",West Midlands,RL1,The Robert Jones and Agnes Hunt Orthopaedic Hospital NHS Foundation Trust,26 ,2 ,1 ,4 ,8 ,,,11 ,,,,
+,Y60,Midlands,"NHS Shropshire, Telford and Wrekin ICB",West Midlands,RXW,The Shrewsbury and Telford Hospital NHS Trust,58 ,5 ,6 ,16 ,15 ,3 ,1 ,9 ,2 ,,,1 
+,Y60,Midlands,NHS Staffordshire and Stoke-On-Trent ICB,West Midlands,RJE,University Hospitals of North Midlands NHS Trust,129 ,7 ,9 ,50 ,40 ,4 ,3 ,12 ,4 ,,,
+,Y61,East of England,"NHS Bedfordshire, Luton and Milton Keynes ICB",ImageEast,RC9,Bedfordshire Hospitals NHS Foundation Trust,104 ,7 ,9 ,34 ,21 ,4 ,1 ,14 ,3 ,2 ,6 ,3 
+,Y61,East of England,"NHS Bedfordshire, Luton and Milton Keynes ICB",Thames Valley Radiology Network ,RD8,Milton Keynes University Hospital NHS Foundation Trust,65 ,3 ,4 ,24 ,17 ,3 ,1 ,6 ,,1 ,5 ,1 
+,Y61,East of England,NHS Cambridgeshire and Peterborough ICB,Eastern Diagnostic,RGM,Royal Papworth Hospital NHS Foundation Trust,24 ,2 ,2 ,2 ,7 ,,,2 ,1 ,1 ,,7 
+,Y61,East of England,NHS Cambridgeshire and Peterborough ICB,Eastern Diagnostic,RGN,North West Anglia NHS Foundation Trust,80 ,4 ,6 ,17 ,32 ,1 ,1 ,10 ,2 ,2 ,4 ,1 
+,Y61,East of England,NHS Cambridgeshire and Peterborough ICB,Eastern Diagnostic,RGT,Cambridge University Hospitals NHS Foundation Trust,107 ,7 ,8 ,24 ,22 ,7 ,5 ,23 ,4 ,2 ,4 ,1 
+,Y61,East of England,NHS Hertfordshire and West Essex ICB,ImageEast,RQW,The Princess Alexandra Hospital NHS Trust,51 ,2 ,3 ,19 ,12 ,3 ,1 ,7 ,1 ,,3 ,
+,Y61,East of England,NHS Hertfordshire and West Essex ICB,ImageEast,RWG,West Hertfordshire Teaching Hospitals NHS Trust,76 ,4 ,7 ,27 ,19 ,3 ,1 ,10 ,2 ,,3 ,
+,Y61,East of England,NHS Hertfordshire and West Essex ICB,ImageEast,RWH,East and North Hertfordshire NHS Trust,67 ,3 ,5 ,25 ,13 ,3 ,1 ,9 ,1 ,2 ,5 ,
+,Y61,East of England,NHS Mid and South Essex ICB,ImageEast,RAJ,Mid and South Essex NHS Foundation Trust,194 ,12 ,10 ,60 ,57 ,13 ,6 ,19 ,6 ,1 ,4 ,6 
+,Y61,East of England,NHS Norfolk and Waveney ICB,Eastern Diagnostic,RCX,"The Queen Elizabeth Hospital, King's Lynn, NHS Foundation Trust",47 ,3 ,3 ,12 ,11 ,3 ,0 ,10 ,1 ,1 ,3 ,
+,Y61,East of England,NHS Norfolk and Waveney ICB,Eastern Diagnostic,RGP,James Paget University Hospitals NHS Foundation Trust,38 ,3 ,3 ,10 ,8 ,4 ,,7 ,,1 ,2 ,
+,Y61,East of England,NHS Norfolk and Waveney ICB,Eastern Diagnostic,RM1,Norfolk and Norwich University Hospitals NHS Foundation Trust,100 ,9 ,10 ,30 ,16 ,3 ,4 ,19 ,4 ,2 ,3 ,
+,Y61,East of England,NHS Suffolk and North East Essex ICB,Eastern Diagnostic,RDE,East Suffolk and North Essex NHS Foundation Trust,90 ,4 ,7 ,22 ,30 ,,4 ,20 ,,,2 ,1 
+,Y61,East of England,NHS Suffolk and North East Essex ICB,Eastern Diagnostic,RGR,West Suffolk NHS Foundation Trust,48 ,3 ,4 ,15 ,12 ,5 ,1 ,6 ,1 ,0 ,0 ,1 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RBL,Wirral University Teaching Hospital NHS Foundation Trust,52 ,1 ,3 ,14 ,21 ,,1 ,8 ,,1 ,2 ,1 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RBN,Mersey and West Lancashire Teaching Hospitals NHS Trust,110 ,5 ,9 ,31 ,33 ,2 ,2 ,17 ,1 ,2 ,7 ,1 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RBQ,Liverpool Heart and Chest Hospital NHS Foundation Trust,26 ,2 ,4 ,1 ,9 ,,1 ,1 ,,,1 ,7 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RBS,Alder Hey Children's NHS Foundation Trust,38 ,3 ,2 ,6 ,12 ,,2 ,6 ,1 ,1 ,4 ,1 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RBT,Mid Cheshire Hospitals NHS Foundation Trust,53 ,3 ,5 ,16 ,13 ,4 ,1 ,8 ,,1 ,2 ,
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,REM,Liverpool University Hospitals NHS Foundation Trust,165 ,6 ,10 ,36 ,37 ,11 ,9 ,24 ,5 ,2 ,24 ,1 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,REN,The Clatterbridge Cancer Centre NHS Foundation Trust,19 ,3 ,3 ,4 ,3 ,,1 ,2 ,3 ,,,
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,REP,Liverpool Women's NHS Foundation Trust,60 ,1 ,1 ,53 ,3 ,,,1 ,,1 ,,
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RET,The Walton Centre NHS Foundation Trust,20 ,5 ,2 ,1 ,3 ,,2 ,7 ,,,,
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RJR,Countess of Chester Hospital NHS Foundation Trust,48 ,3 ,4 ,18 ,10 ,3 ,2 ,7 ,0 ,,1 ,
+,Y62,North West,NHS Cheshire and Merseyside ICB,Cheshire & Merseyside Radiology,RWW,Warrington and Halton Teaching Hospitals NHS Foundation Trust,69 ,4 ,5 ,27 ,12 ,,,13 ,1 ,1 ,5 ,1 
+,Y62,North West,NHS Cheshire and Merseyside ICB,Greater Manchester,RJN,East Cheshire NHS Trust,35 ,2 ,2 ,16 ,8 ,2 ,,4 ,,,1 ,
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,R0A,Manchester University NHS Foundation Trust,245 ,8 ,11 ,66 ,60 ,21 ,7 ,41 ,9 ,5 ,17 ,
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,RBV,The Christie NHS Foundation Trust,30 ,4 ,3 ,7 ,8 ,,2 ,2 ,3 ,1 ,,
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,RM3,Northern Care Alliance NHS Foundation Trust,160 ,14 ,12 ,44 ,40 ,,5 ,33 ,2 ,2 ,6 ,2 
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,RMC,Bolton NHS Foundation Trust,63 ,2 ,4 ,24 ,15 ,7 ,1 ,7 ,1 ,,2 ,
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,RMP,Tameside and Glossop Integrated Care NHS Foundation Trust,43 ,3 ,5 ,9 ,15 ,2 ,,6 ,1 ,1 ,1 ,
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,RRF,"Wrightington, Wigan and Leigh NHS Foundation Trust",78 ,4 ,4 ,21 ,26 ,4 ,1 ,14 ,1 ,1 ,2 ,
+,Y62,North West,NHS Greater Manchester ICB,Greater Manchester,RWJ,Stockport NHS Foundation Trust,46 ,2 ,5 ,15 ,12 ,,,8 ,1 ,1 ,2 ,
+,Y62,North West,NHS Lancashire and South Cumbria ICB,Lancashire & South Cumbria Diagnostic,RTX,University Hospitals of Morecambe Bay NHS Foundation Trust,87 ,4 ,5 ,26 ,21 ,9 ,,10 ,2 ,1 ,8 ,1 
+,Y62,North West,NHS Lancashire and South Cumbria ICB,Lancashire & South Cumbria Diagnostic,RXL,Blackpool Teaching Hospitals NHS Foundation Trust,70 ,4 ,6 ,18 ,26 ,3 ,2 ,5 ,2 ,1 ,3 ,
+,Y62,North West,NHS Lancashire and South Cumbria ICB,Lancashire & South Cumbria Diagnostic,RXN,Lancashire Teaching Hospitals NHS Foundation Trust,95 ,7 ,6 ,30 ,22 ,3 ,6 ,15 ,3 ,1 ,2 ,
+,Y62,North West,NHS Lancashire and South Cumbria ICB,Lancashire & South Cumbria Diagnostic,RXR,East Lancashire Hospitals NHS Trust,82 ,5 ,6 ,27 ,18 ,4 ,1 ,14 ,2 ,1 ,4 ,
+,Y63,North East and Yorkshire,NHS Humber and North Yorkshire ICB,Humber & North Yorkshire ,RCB,York and Scarborough Teaching Hospitals NHS Foundation Trust,91 ,3 ,4 ,30 ,25 ,8 ,2 ,9 ,1 ,2 ,6 ,1 
+,Y63,North East and Yorkshire,NHS Humber and North Yorkshire ICB,Humber & North Yorkshire ,RJL,Northern Lincolnshire and Goole NHS Foundation Trust,67 ,4 ,6 ,20 ,19 ,2 ,,9 ,2 ,1 ,2 ,2 
+,Y63,North East and Yorkshire,NHS Humber and North Yorkshire ICB,Humber & North Yorkshire ,RWA,Hull University Teaching Hospitals NHS Trust,126 ,8 ,8 ,35 ,42 ,8 ,7 ,13 ,4 ,,1 ,
+,Y63,North East and Yorkshire,NHS Humber and North Yorkshire ICB,Yorkshire Imaging Collaborative,RCD,Harrogate and District NHS Foundation Trust,60 ,2 ,2 ,18 ,11 ,1 ,1 ,5 ,1 ,2 ,16 ,1 
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,R0B,South Tyneside and Sunderland NHS Foundation Trust,80 ,3 ,5 ,16 ,22 ,,3 ,20 ,3 ,2 ,4 ,2 
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RNN,North Cumbria Integrated Care NHS Foundation Trust,67 ,5 ,6 ,16 ,16 ,6 ,2 ,8 ,2 ,1 ,5 ,
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RR7,Gateshead Health NHS Foundation Trust,38 ,4 ,4 ,11 ,11 ,,1 ,4 ,,1 ,1 ,1 
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RTD,The Newcastle Upon Tyne Hospitals NHS Foundation Trust,138 ,10 ,9 ,31 ,26 ,3 ,7 ,24 ,5 ,4 ,13 ,6 
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RTF,Northumbria Healthcare NHS Foundation Trust,87 ,4 ,7 ,22 ,25 ,5 ,,16 ,,2 ,5 ,1 
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RTR,South Tees Hospitals NHS Foundation Trust,114 ,6 ,6 ,45 ,20 ,1 ,6 ,19 ,3 ,1 ,7 ,
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RVW,North Tees and Hartlepool NHS Foundation Trust,53 ,2 ,6 ,17 ,15 ,,,10 ,1 ,1 ,1 ,
+,Y63,North East and Yorkshire,NHS North East and North Cumbria ICB,North East & North Cumbria ,RXP,County Durham and Darlington NHS Foundation Trust,102 ,3 ,7 ,34 ,17 ,2 ,,10 ,20 ,2 ,6 ,1 
+,Y63,North East and Yorkshire,NHS South Yorkshire ICB,South Yorkshire and Bassetlaw ,RCU,Sheffield Children's NHS Foundation Trust,25 ,2 ,1 ,5 ,6 ,,,7 ,1 ,1 ,2 ,
+,Y63,North East and Yorkshire,NHS South Yorkshire ICB,South Yorkshire and Bassetlaw ,RFF,Barnsley Hospital NHS Foundation Trust,49 ,3 ,3 ,18 ,8 ,5 ,1 ,6 ,1 ,1 ,3 ,0 
+,Y63,North East and Yorkshire,NHS South Yorkshire ICB,South Yorkshire and Bassetlaw ,RFR,The Rotherham NHS Foundation Trust,45 ,2 ,3 ,20 ,7 ,3 ,,4 ,2 ,1 ,3 ,
+,Y63,North East and Yorkshire,NHS South Yorkshire ICB,South Yorkshire and Bassetlaw ,RHQ,Sheffield Teaching Hospitals NHS Foundation Trust,106 ,7 ,6 ,35 ,23 ,7 ,4 ,17 ,5 ,,2 ,0 
+,Y63,North East and Yorkshire,NHS South Yorkshire ICB,South Yorkshire and Bassetlaw ,RP5,Doncaster and Bassetlaw Teaching Hospitals NHS Foundation Trust,83 ,4 ,4 ,29 ,20 ,4 ,1 ,14 ,1 ,2 ,3 ,1 
+,Y63,North East and Yorkshire,NHS West Yorkshire ICB,Yorkshire Imaging Collaborative,RAE,Bradford Teaching Hospitals NHS Foundation Trust,85 ,4 ,5 ,31 ,20 ,10 ,2 ,9 ,2 ,1 ,,1 
+,Y63,North East and Yorkshire,NHS West Yorkshire ICB,Yorkshire Imaging Collaborative,RCF,Airedale NHS Foundation Trust,34 ,1 ,2 ,12 ,9 ,1 ,,6 ,,1 ,2 ,
+,Y63,North East and Yorkshire,NHS West Yorkshire ICB,Yorkshire Imaging Collaborative,RR8,Leeds Teaching Hospitals NHS Trust,181 ,9 ,9 ,65 ,49 ,12 ,4 ,25 ,6 ,0 ,2 ,
+,Y63,North East and Yorkshire,NHS West Yorkshire ICB,Yorkshire Imaging Collaborative,RWY,Calderdale and Huddersfield NHS Foundation Trust,75 ,3 ,4 ,27 ,21 ,2 ,2 ,11 ,1 ,2 ,2 ,
+,Y63,North East and Yorkshire,NHS West Yorkshire ICB,Yorkshire Imaging Collaborative,RXF,Mid Yorkshire Teaching NHS Trust,109 ,6 ,8 ,36 ,41 ,3 ,,8 ,,2 ,5 ,
