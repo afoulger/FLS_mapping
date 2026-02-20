@@ -14,7 +14,9 @@ def load_dexa_data(df_name, skiprows, usecols):
        #Remove blank rows at the bottom  
        df = df.loc[df['region'].notnull()] 
 
-       #Note: Need to sort out null values as displayed differently in each dataset
+       #Change dexa_count column to numeric and change null values to zeroes for consistency
+       df['dexa_count'] = pd.to_numeric(df['dexa_count'], errors='coerce')
+       df['dexa_count'] = df['dexa_count'].replace(np.nan, 0)
 
        return df
 
@@ -22,6 +24,7 @@ def grab_clean_df(df_name, skiprows=None, usecols=None):
        #Load csv files and tidy up column names
        df = pd.read_csv(df_name, skiprows=skiprows, usecols=usecols)
        df = df.rename(columns=lambda x: tokenize(x))
+       df = pd.DataFrame(df)
 
        return df
 
