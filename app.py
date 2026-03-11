@@ -20,6 +20,7 @@ fls_list_2024 = dl.grab_clean_df('Data/FLS_List_2024.csv')
 nh_areas = dl.grab_clean_df('Data/Neighbourhood_Health_areas.csv')
 nhs_trusts = dl.grab_clean_df('Data/NHS_Trusts.csv')
 cdcs = dl.grab_clean_df('Data/CDCs.csv', skiprows=1)
+trust_ics_region_mapping =  dl.grab_clean_df('Data/Trust_ICS_Region_mapping.csv')
 
 print(dexa_data_2223.columns)
 print(dexa_data_2324.columns)
@@ -28,6 +29,7 @@ print(fls_list_2024.columns)
 print(nh_areas.columns)
 print(nhs_trusts.columns)
 print(cdcs.columns)
+print(trust_ics_region_mapping.columns)
 
 #Display datasets on streamlit
 st.write("DEXA scanner data 2022-23")
@@ -51,6 +53,9 @@ nhs_trusts
 st.write("CDCs")
 cdcs
 
+st.write("Trust_ICS_Region_mapping")
+trust_ics_region_mapping
+
 #Count number of dexa scanners in each year
 dexa_count_2223 = dexa_data_2223['dexa_count'].sum()
 dexa_count_2324 = dexa_data_2324['dexa_count'].sum()
@@ -62,6 +67,8 @@ st.write('DEXA count for 24-25 = ', dexa_count_2425)
 
 #Create a combined table
 
+st.write('Original NHS Trusts list', nhs_trusts.shape)
+
 nhs_trusts_table = nhs_trusts.merge(dexa_data_2223[['org_name','dexa_count']].rename(columns = {'dexa_count':'dexa_count_2223'}), left_on='nhs_trust_name', right_on='org_name', how='left')
 nhs_trusts_table = nhs_trusts_table.drop(columns=['org_name'])
 
@@ -71,8 +78,30 @@ nhs_trusts_table = nhs_trusts_table.drop(columns=['org_name'])
 nhs_trusts_table = nhs_trusts_table.merge(dexa_data_2425[['org_name','dexa_count']].rename(columns = {'dexa_count':'dexa_count_2425'}), left_on='nhs_trust_name', right_on='org_name', how='left')
 nhs_trusts_table = nhs_trusts_table.drop(columns=['org_name'])
 
+#Replace nulls with zeroes
+nhs_trusts_table['dexa_count_2223'] = nhs_trusts_table['dexa_count_2223'].replace(np.nan, 0)
+nhs_trusts_table['dexa_count_2324'] = nhs_trusts_table['dexa_count_2324'].replace(np.nan, 0)
+nhs_trusts_table['dexa_count_2425'] = nhs_trusts_table['dexa_count_2425'].replace(np.nan, 0)
+
+st.write('After adding DEXA data', nhs_trusts_table.shape)
+
 nhs_trusts_table = nhs_trusts_table.merge(fls_list_2024[['fls_service_unit','nhs_trust']], left_on='nhs_trust_name', right_on='nhs_trust', how='left')
 nhs_trusts_table = nhs_trusts_table.drop(columns=['nhs_trust'])
+
+nhs_trusts_table['fls_count'] = np.where(nhs_trusts_table['fls_service_unit'].notnull(), 1, nhs_trusts_table['fls_service_unit'])
+
+nhs_trusts_table = nhs_trusts_table.groupby(['nhs_trust_name', 'acute', 'non_acute', 'ambulance_trust', 'closed_disbanded_merged', 'dexa_count_2223', 'dexa_count_2324', 'dexa_count_2425']).agg(fls_total=('fls_count','sum')).reset_index()
+
+st.write('After adding FLS data', nhs_trusts_table.shape)
+
+nhs_trusts_table = nhs_trusts_table.merge(cdcs[['name_of_cdc','updated_nhs_trust_name']], left_on='nhs_trust_name', right_on='updated_nhs_trust_name', how='left')
+nhs_trusts_table = nhs_trusts_table.drop(columns=['updated_nhs_trust_name'])
+
+nhs_trusts_table['cdc_count'] = np.where(nhs_trusts_table['name_of_cdc'].notnull(), 1, nhs_trusts_table['name_of_cdc'])
+
+nhs_trusts_table = nhs_trusts_table.groupby(['nhs_trust_name', 'acute', 'non_acute', 'ambulance_trust', 'closed_disbanded_merged', 'dexa_count_2223', 'dexa_count_2324', 'dexa_count_2425', 'fls_total']).agg(cdc_total=('cdc_count','sum')).reset_index()
+
+st.write('After adding CDC data', nhs_trusts_table.shape)
 
 nhs_trusts_table = nhs_trusts_table.merge(nh_areas[['nnhip_places','associated_trust_1']].rename(columns = {'nnhip_places':'nnhip_places_1'}), left_on='nhs_trust_name', right_on='associated_trust_1', how='left')
 nhs_trusts_table = nhs_trusts_table.drop(columns=['associated_trust_1'])
@@ -83,8 +112,34 @@ nhs_trusts_table = nhs_trusts_table.drop(columns=['associated_trust_2'])
 nhs_trusts_table = nhs_trusts_table.merge(nh_areas[['nnhip_places','associated_trust_3']].rename(columns = {'nnhip_places':'nnhip_places_3'}), left_on='nhs_trust_name', right_on='associated_trust_3', how='left')
 nhs_trusts_table = nhs_trusts_table.drop(columns=['associated_trust_3'])
 
-nhs_trusts_table = nhs_trusts_table.merge(cdcs[['name_of_cdc','updated_nhs_trust_name']], left_on='nhs_trust_name', right_on='updated_nhs_trust_name', how='left')
-nhs_trusts_table = nhs_trusts_table.drop(columns=['updated_nhs_trust_name'])
+nhs_trusts_table['nnhip_count_1'] = np.where(nhs_trusts_table['nnhip_places_1'].notnull(), 1, 0)
+nhs_trusts_table['nnhip_count_2'] = np.where(nhs_trusts_table['nnhip_places_2'].notnull(), 1, 0)
+nhs_trusts_table['nnhip_count_3'] = np.where(nhs_trusts_table['nnhip_places_3'].notnull(), 1, 0)
+
+nhs_trusts_table['nnhip_count'] = nhs_trusts_table['nnhip_count_1'] + nhs_trusts_table['nnhip_count_2'] + nhs_trusts_table['nnhip_count_3']
+
+nhs_trusts_table = nhs_trusts_table.groupby(['nhs_trust_name', 'acute', 'non_acute', 'ambulance_trust', 'closed_disbanded_merged', 'dexa_count_2223', 'dexa_count_2324', 'dexa_count_2425', 'fls_total', 'cdc_total']).agg(nnhip_total=('nnhip_count','sum')).reset_index()
+
+st.write('After adding NNHIP data', nhs_trusts_table.shape)
+
+st.write(trust_ics_region_mapping.columns)
+
+nhs_trusts_table = nhs_trusts_table.merge(trust_ics_region_mapping[['trust_name','ics', 'region']], left_on='nhs_trust_name', right_on='trust_name', how='left')
+nhs_trusts_table = nhs_trusts_table.drop(columns=['trust_name'])
+
+st.write('After adding ICSs and regions', nhs_trusts_table.shape)
 
 st.write("NHS Trusts table")
 nhs_trusts_table
+
+#nhs_trusts_table.to_csv('Data/nhs_trusts_table.csv', index=False)
+
+
+#Check totals
+
+st.write('dexa_count_2223 = ', nhs_trusts_table['dexa_count_2223'].sum())
+st.write('dexa_count_2324 = ', nhs_trusts_table['dexa_count_2324'].sum())
+st.write('dexa_count_2425 = ', nhs_trusts_table['dexa_count_2425'].sum())
+st.write('fls_total = ', nhs_trusts_table['fls_total'].sum())
+st.write('cdc_total = ', nhs_trusts_table['cdc_total'].sum())
+st.write('nnhip_total = ', nhs_trusts_table['nnhip_total'].sum())
