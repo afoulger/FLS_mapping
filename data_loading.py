@@ -36,3 +36,10 @@ def tokenize(text):
        except:
               text = ""
        return text
+
+def merge_data(df, df_orig, merge_col, second_col, new_col_names_dict=None):
+    
+    new_table = df_orig.merge(df[[merge_col, second_col]].rename(columns = new_col_names_dict), left_on='nhs_trust_name', right_on=merge_col, how='left')
+    new_table = new_table.drop(columns=[merge_col])
+
+    return new_table
