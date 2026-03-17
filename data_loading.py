@@ -37,9 +37,16 @@ def tokenize(text):
               text = ""
        return text
 
-def merge_data(df, df_orig, merge_col, second_col, new_col_names_dict=None):
+def merge_data(df, df_orig, left_merge_col, merge_col, second_col, new_col_names_dict=None):
     
-    new_table = df_orig.merge(df[[merge_col, second_col]].rename(columns = new_col_names_dict), left_on='nhs_trust_name', right_on=merge_col, how='left')
+    new_table = df_orig.merge(df[[merge_col, second_col]].rename(columns = new_col_names_dict), left_on=left_merge_col, right_on=merge_col, how='left')
     new_table = new_table.drop(columns=[merge_col])
 
     return new_table
+
+def update_dexa_trust_names(df, lookup_df):
+       df = merge_data(lookup_df, df, 'org_name', 'dexa_data_trust_name', 'new_trust_name', new_col_names_dict={})
+       df['org_name'] = np.where(df['new_trust_name'].notnull(), df['new_trust_name'], df['org_name'])
+       df = df.drop(columns=['new_trust_name'])
+
+       return df
