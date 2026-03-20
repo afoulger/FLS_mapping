@@ -134,3 +134,18 @@ st.write('dexa_count_2425 = ', nhs_trusts_table['dexa_count_2425'].sum())
 st.write('fls_total = ', nhs_trusts_table['fls_total'].sum())
 st.write('cdc_total = ', nhs_trusts_table['cdc_total'].sum())
 st.write('nnhip_total = ', nhs_trusts_table['nnhip_total'].sum())
+
+
+regions_table = nhs_trusts_table.groupby(['region']).agg(dexa_count_2223=('dexa_count_2223','sum'), dexa_count_2324=('dexa_count_2324','sum'), dexa_count_2425=('dexa_count_2425','sum'), fls_total=('fls_total','sum'), cdc_total=('cdc_total','sum') ).reset_index()
+
+st.write("Regions table")
+regions_table
+
+#Check regional totals
+
+st.write('dexa_count_2223 = ', regions_table['dexa_count_2223'].sum())
+st.write('dexa_count_2324 = ', regions_table['dexa_count_2324'].sum())
+st.write('dexa_count_2425 = ', regions_table['dexa_count_2425'].sum())
+st.write('fls_total = ', regions_table['fls_total'].sum())
+st.write('cdc_total = ', regions_table['cdc_total'].sum())
+#st.write('nnhip_total = ', regions_table['nnhip_total'].sum())

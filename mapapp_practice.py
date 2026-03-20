@@ -2,11 +2,10 @@ import streamlit as st
 import pydeck as pdk
 import geopandas as gpd
 import pandas as pd
-import app
 
-st.set_page_config(page_title="Example Map: Regions", layout="wide")
+st.set_page_config(page_title="NHS England Regions & Sites", layout="wide")
 
-st.title("Example Map: Regions")
+st.title("🏥 NHS England: Regions & Facilities")
 
 @st.cache_data
 def get_map_data():
@@ -29,25 +28,24 @@ def get_map_data():
         "North East and Yorkshire": [0, 206, 209, 100]
     }
     
-     # 2. Create Site Data (Dots)
-    dot_data = app.regions_table
-    
-    st.write(dot_data)
-
-    # Apply colors and create a dedicated tooltip column for regions   Not working!
+    # Apply colors and create a dedicated tooltip column for regions
     geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
-    geo_df['tooltip_text'] = (
-        "<b>Region:</b> " + geo_df['NHSER21NM'] + "<br/>" +
-        "<b>DEXA count 2223:</b> " + dot_data['dexa_count_2223'].astype(str) + "<br/>" +
-        "<b>DEXA count 2324:</b> " + dot_data['dexa_count_2324'].astype(str) + "<br/>" +
-        "<b>DEXA count 2425:</b> " + dot_data['dexa_count_2425'].astype(str)
-    )
-
-    # Create a dedicated tooltip column for dots     Need to define lat and lon for dots
+    geo_df['tooltip_text'] = "<b>Region:</b> " + geo_df['NHSER21NM']
+    
+    # 2. Create Site Data (Dots)
+    dot_data = pd.DataFrame({
+        'site_name': ['London HQ', 'Manchester Hub', 'Birmingham Site', 'Leeds Clinic', 'Bristol Office', 'Newcastle Base'],
+        'lat': [51.5074, 53.4808, 52.4862, 53.8008, 51.4545, 54.9783],
+        'lon': [-0.1278, -2.2426, -1.8904, -1.5491, -2.5879, -1.6178],
+        'staff_count': [450, 310, 290, 120, 85, 115],
+        'status': ['Operational', 'Operational', 'Under Reno', 'Operational', 'Closed', 'Operational']
+    })
+    
+    # Create a dedicated tooltip column for dots
     dot_data['tooltip_text'] = (
-        "<b>DEXA count 2223:</b> " + dot_data['dexa_count_2223'].astype(str) + "<br/>" +
-        "<b>DEXA count 2324:</b> " + dot_data['dexa_count_2324'].astype(str) + "<br/>" +
-        "<b>DEXA count 2425:</b> " + dot_data['dexa_count_2425'].astype(str)
+        "<b>Facility:</b> " + dot_data['site_name'] + "<br/>" +
+        "<b>Status:</b> " + dot_data['status'] + "<br/>" +
+        "<b>Staff:</b> " + dot_data['staff_count'].astype(str)
     )
     
     return geo_df, dot_data
