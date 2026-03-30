@@ -30,31 +30,36 @@ def get_map_data():
     }
     
      # 2. Create Site Data (Dots)
-    dot_data = app.regions_table
+    regions_data = app.regions_table
     
-    st.write(dot_data)
+    st.write(regions_data)
+
+    geo_df = geo_df.merge(regions_data, left_on='NHSER21NM', right_on='region', how='left')
 
     # Apply colors and create a dedicated tooltip column for regions   Not working!
     geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
     geo_df['tooltip_text'] = (
         "<b>Region:</b> " + geo_df['NHSER21NM'] + "<br/>" +
-        "<b>DEXA count 2223:</b> " + dot_data['dexa_count_2223'].astype(str) + "<br/>" +
-        "<b>DEXA count 2324:</b> " + dot_data['dexa_count_2324'].astype(str) + "<br/>" +
-        "<b>DEXA count 2425:</b> " + dot_data['dexa_count_2425'].astype(str)
+        "<b>DEXA count 2223:</b> " + geo_df['dexa_count_2223'].astype(str) + "<br/>" +
+        "<b>DEXA count 2324:</b> " + geo_df['dexa_count_2324'].astype(str) + "<br/>" +
+        "<b>DEXA count 2425:</b> " + geo_df['dexa_count_2425'].astype(str)
     )
 
+    trusts_data = pd.read_csv('Data/NHS_Trusts_etr_inc_headers.csv')
+    print(trusts_data.columns)
+
+    trusts_data = trusts_data[['Organisation Code', 'Name', 'Lat', 'Long']]
+
     # Create a dedicated tooltip column for dots     Need to define lat and lon for dots
-    dot_data['tooltip_text'] = (
-        "<b>DEXA count 2223:</b> " + dot_data['dexa_count_2223'].astype(str) + "<br/>" +
-        "<b>DEXA count 2324:</b> " + dot_data['dexa_count_2324'].astype(str) + "<br/>" +
-        "<b>DEXA count 2425:</b> " + dot_data['dexa_count_2425'].astype(str)
+    trusts_data['tooltip_text'] = (
+        "<b>Trust Name:</b> " + trusts_data['Name'].astype(str)
     )
     
-    return geo_df, dot_data
+    return geo_df, trusts_data
 
 # Load data
 try:
-    geo_df, dot_df = get_map_data()
+    geo_df, trusts_data = get_map_data()
 
     # --- LAYERS ---
     # Layer 1: Regions
@@ -71,10 +76,10 @@ try:
     # Layer 2: Dots
     dot_layer = pdk.Layer(
         "ScatterplotLayer",
-        dot_df,
-        get_position=['lon', 'lat'],
+        trusts_data,
+        get_position=['Long', 'Lat'],
         get_color=[255, 255, 255, 255], # Solid white dots
-        get_radius=7000,
+        get_radius=700,
         radius_min_pixels=6,
         pickable=True,
     )
@@ -110,9 +115,9 @@ try:
     with col1:
         st.subheader("Region List")
         st.dataframe(geo_df[['NHSER21NM']], width='stretch')
-    with col2:
-        st.subheader("Facility List")
-        st.dataframe(dot_df[['site_name', 'status', 'staff_count']], width='stretch')
+    #with col2:
+    #    st.subheader("Facility List")
+    #    st.dataframe(dot_df[['site_name', 'status', 'staff_count']], width='stretch')
 
 except Exception as e:
     st.error(f"Error: {e}")

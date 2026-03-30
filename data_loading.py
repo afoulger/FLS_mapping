@@ -9,7 +9,7 @@ def load_dexa_data(df_name, skiprows, usecols):
        df = grab_clean_df(df_name, skiprows, usecols)
        
        #Rename columns
-       df = df.rename(columns = {'icb_integrated_care_board':'icb', 'organisation_code': 'org_code', 'organisation_name':'org_name', 'dexa':'dexa_count'})
+       df = df.rename(columns = {'icb_integrated_care_board':'icb', 'organisation_code': 'dexa_trust_code', 'organisation_name':'org_name', 'dexa':'dexa_count'})
     
        #Remove blank rows at the bottom  
        df = df.loc[df['region'].notnull()] 
