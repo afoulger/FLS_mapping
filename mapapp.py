@@ -60,11 +60,6 @@ def get_map_data():
    
     
     # 2. Create Site Data (Dots)
-
-    #dexa_data_2425, dexa_count_2425 = dl.load_dexa_data('Data/National-Imaging-Data-Collection-Asset-Count-2024-25-v1-FINAL.csv', skiprows=13)  
-    #cdcs = dl.load_cdc_data('Data/CDCs.csv')
-    #regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
-    #regions_data = app.regions_data
     
     st.write(regions_data)
 
@@ -77,11 +72,6 @@ def get_map_data():
         "<b>DEXA count:</b> " + geo_df['dexa_count_2425'].astype(str) + "<br/>" +
         "<b>CDC count:</b> " + geo_df['cdc_count'].astype(str)
     )
-
-    #nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
-    #nhs_trusts_data = app.nhs_trusts_data
-
-    #nhs_trusts_data = nhs_trusts_data[['trust_code', 'trust_name', 'lat', 'long']]
 
     # Create a dedicated tooltip column for dots
     nhs_trusts_data['tooltip_text'] = (
