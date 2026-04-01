@@ -2,11 +2,37 @@ import streamlit as st
 import pydeck as pdk
 import geopandas as gpd
 import pandas as pd
-import app
+import data_loading as dl
 
 st.set_page_config(page_title="Example Map: Regions", layout="wide")
 
 st.title("Example Map: Regions")
+
+#Load all datasets
+
+#Load DEXA data
+dexa_data_2425, dexa_count_2425 = dl.load_dexa_data('Data/National-Imaging-Data-Collection-Asset-Count-2024-25-v1-FINAL.csv', skiprows=13)  
+
+#Load CDC data
+cdcs = dl.load_cdc_data('Data/CDCs.csv')
+
+#Load regions, ICBs and NHS Trusts data
+regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
+icbs_summary = dl.load_icbs_data('Data/ICBs_eccg_inc_headers.csv')
+nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
+
+#Create CDCs Trust level data
+cdcs_trust_level = dl.create_trust_level_cdc_data(cdcs)
+
+#Create NHS Trusts table 
+nhs_trusts_table = dl.create_nhs_trusts_table(nhs_trusts_data, dexa_data_2425, cdcs_trust_level)
+
+#Create ICB level table
+#icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, icbs_summary)
+
+#Create Region level table
+regions_summary, regions_data = dl.create_region_level_table(nhs_trusts_table, regions_data)
+
 
 @st.cache_data
 def get_map_data():
@@ -29,37 +55,44 @@ def get_map_data():
         "North East and Yorkshire": [0, 206, 209, 100]
     }
     
-     # 2. Create Site Data (Dots)
-    regions_data = app.regions_table
+    #Create variable with region names in upper case
+    geo_df['NHSER21NM_upper'] = geo_df['NHSER21NM'].str.upper() 
+   
+    
+    # 2. Create Site Data (Dots)
+
+    #dexa_data_2425, dexa_count_2425 = dl.load_dexa_data('Data/National-Imaging-Data-Collection-Asset-Count-2024-25-v1-FINAL.csv', skiprows=13)  
+    #cdcs = dl.load_cdc_data('Data/CDCs.csv')
+    #regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
+    #regions_data = app.regions_data
     
     st.write(regions_data)
 
-    geo_df = geo_df.merge(regions_data, left_on='NHSER21NM', right_on='region', how='left')
+    geo_df = geo_df.merge(regions_data, left_on='NHSER21NM_upper', right_on='region_name', how='left')
 
     # Apply colors and create a dedicated tooltip column for regions   Not working!
     geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
     geo_df['tooltip_text'] = (
         "<b>Region:</b> " + geo_df['NHSER21NM'] + "<br/>" +
-        "<b>DEXA count 2223:</b> " + geo_df['dexa_count_2223'].astype(str) + "<br/>" +
-        "<b>DEXA count 2324:</b> " + geo_df['dexa_count_2324'].astype(str) + "<br/>" +
-        "<b>DEXA count 2425:</b> " + geo_df['dexa_count_2425'].astype(str)
+        "<b>DEXA count:</b> " + geo_df['dexa_count_2425'].astype(str) + "<br/>" +
+        "<b>CDC count:</b> " + geo_df['cdc_count'].astype(str)
     )
 
-    trusts_data = pd.read_csv('Data/NHS_Trusts_etr_inc_headers.csv')
-    print(trusts_data.columns)
+    #nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
+    #nhs_trusts_data = app.nhs_trusts_data
 
-    trusts_data = trusts_data[['Organisation Code', 'Name', 'Lat', 'Long']]
+    #nhs_trusts_data = nhs_trusts_data[['trust_code', 'trust_name', 'lat', 'long']]
 
-    # Create a dedicated tooltip column for dots     Need to define lat and lon for dots
-    trusts_data['tooltip_text'] = (
-        "<b>Trust Name:</b> " + trusts_data['Name'].astype(str)
+    # Create a dedicated tooltip column for dots
+    nhs_trusts_data['tooltip_text'] = (
+        "<b>Trust Name:</b> " + nhs_trusts_data['trust_name'].astype(str)
     )
     
-    return geo_df, trusts_data
+    return geo_df, nhs_trusts_data
 
 # Load data
 try:
-    geo_df, trusts_data = get_map_data()
+    geo_df, nhs_trusts_data = get_map_data()
 
     # --- LAYERS ---
     # Layer 1: Regions
@@ -76,11 +109,11 @@ try:
     # Layer 2: Dots
     dot_layer = pdk.Layer(
         "ScatterplotLayer",
-        trusts_data,
-        get_position=['Long', 'Lat'],
+        nhs_trusts_data,
+        get_position=['long', 'lat'],
         get_color=[255, 255, 255, 255], # Solid white dots
-        get_radius=700,
-        radius_min_pixels=6,
+        get_radius=100,
+        radius_min_pixels=4,
         pickable=True,
     )
 
