@@ -2,11 +2,13 @@ import streamlit as st
 import pydeck as pdk
 import geopandas as gpd
 import pandas as pd
+import numpy as np
+import json
 import data_loading as dl
 
 st.set_page_config(page_title="Example Map: Regions", layout="wide")
 
-st.title("Example Map: Regions")
+st.title("NHS Mapping Tool: ICB & Regional Views")
 
 #Load all datasets
 
@@ -18,7 +20,7 @@ cdcs = dl.load_cdc_data('Data/CDCs.csv')
 
 #Load regions, ICBs and NHS Trusts data
 regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
-icbs_summary = dl.load_icbs_data('Data/ICBs_eccg_inc_headers.csv')
+icbs_data, icbs_summary = dl.load_icbs_data('Data/ICBs_eccg_inc_headers.csv')
 nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
 
 #Create CDCs Trust level data
@@ -28,14 +30,56 @@ cdcs_trust_level = dl.create_trust_level_cdc_data(cdcs)
 nhs_trusts_table = dl.create_nhs_trusts_table(nhs_trusts_data, dexa_data_2425, cdcs_trust_level)
 
 #Create ICB level table
-#icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, icbs_summary)
+icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, icbs_summary)
+
+#Create ICBs code mapping
+icbs_code_mapping = dl.load_icbs_code_mapping('Data/code_mapping.csv')
 
 #Create Region level table
 regions_summary, regions_data = dl.create_region_level_table(nhs_trusts_table, regions_data)
 
 
+# --- SIDEBAR CONTROLS ---
+with st.sidebar:
+    st.header("Map Settings")
+    # THE SWITCHER: This controls which data path we take
+    map_mode = st.radio(
+        "Select View Layer:",
+        options=["ICB Boundaries", "NHS Regions"],
+        index=0
+    )
+    
+    show_cdc_dots = st.checkbox("Show CDC Locations", value=True)
+
+    show_nhs_trust_dots = st.checkbox("Show NHS Trust Locations", value=True)
+
 @st.cache_data
-def get_map_data():
+def load_icb_data():
+    """Loads ICB GeoJSON and merges with ICB data"""
+    # Using local paths as per your first snippet
+    gdf = gpd.read_file("Data/icb_boundaries.geojson")
+    if gdf.crs != "EPSG:4326":
+        gdf = gdf.to_crs(epsg=4326)
+    
+    gdf = gdf.merge(icbs_code_mapping, left_on="ICB23CD", right_on="icb24cd", how="left")
+    gdf = gdf.merge(icbs_summary, left_on="icb24cdh", right_on="icb_code", how="left")
+
+    # Generate random colors
+    np.random.seed(42)
+    gdf['fill_color'] = [
+        [np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 140] 
+        for _ in range(len(gdf))
+    ]
+
+    # Create a dedicated tooltip column for regions
+    gdf['tooltip_text'] = (
+        "<b>ICB:</b> " + gdf['icb_name'] + "<br/>"
+    )
+
+    return json.loads(gdf.to_json())
+
+@st.cache_data
+def load_region_data():
     # 1. Load and prepare Region Polygons
     # Ensure nhs_regions.geojson is in your root folder
     geo_df = gpd.read_file("Data/nhs_regions.geojson")
@@ -55,57 +99,104 @@ def get_map_data():
         "North East and Yorkshire": [0, 206, 209, 100]
     }
     
-    #Create variable with region names in upper case
-    geo_df['NHSER21NM_upper'] = geo_df['NHSER21NM'].str.upper() 
-   
-    
-    # 2. Create Site Data (Dots)
-    
-    st.write(regions_data)
+    #merge regions data and regions geojson 
+    geo_df = geo_df.merge(regions_data, left_on=geo_df['NHSER21NM'].str.upper(), right_on='region_name', how='left')
 
-    geo_df = geo_df.merge(regions_data, left_on='NHSER21NM_upper', right_on='region_name', how='left')
 
-    # Apply colors and create a dedicated tooltip column for regions   Not working!
+    # Apply colors and 
     geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
+
+    # Fill missing with grey
+    geo_df['fill_color'] = geo_df['fill_color'].apply(lambda x: x if isinstance(x, list) else [200, 200, 200, 100])
+    
+    # Create a dedicated tooltip column for regions
     geo_df['tooltip_text'] = (
         "<b>Region:</b> " + geo_df['NHSER21NM'] + "<br/>" +
         "<b>DEXA count:</b> " + geo_df['dexa_count_2425'].astype(str) + "<br/>" +
         "<b>CDC count:</b> " + geo_df['cdc_count'].astype(str)
     )
 
+    return json.loads(geo_df.to_json())
+
+    
+@st.cache_data
+def get_cdc_dots():
+ 
+    # Create a dedicated tooltip column for dots
+    cdcs['tooltip_text'] = (
+        "<b>CDC Name:</b> " + cdcs['name_of_cdc'].astype(str)
+        )
+
+    return pd.DataFrame(cdcs)
+
+@st.cache_data
+def get_nhs_trust_dots():
+ 
     # Create a dedicated tooltip column for dots
     nhs_trusts_data['tooltip_text'] = (
         "<b>Trust Name:</b> " + nhs_trusts_data['trust_name'].astype(str)
-    )
+        )
     
-    return geo_df, nhs_trusts_data
+    st.write(nhs_trusts_data)
 
-# Load data
+    return pd.DataFrame(nhs_trusts_data)
+
+
+
 try:
-    geo_df, nhs_trusts_data = get_map_data()
+    map_layers = []
 
-    # --- LAYERS ---
-    # Layer 1: Regions
-    region_layer = pdk.Layer(
+    # 1. Select the Base GeoJSON Layer based on Radio Button
+    if map_mode == "ICB Boundaries":
+        geojson_data = load_icb_data()
+        tooltip_html = """
+            <b>ICB:</b> {icb_name}<br/>
+            <b>Code 24:</b> {ICB24CD}
+        """
+    else:
+        geojson_data = load_region_data()
+        tooltip_html = """
+            <b>Region:</b> {NHSER21NM}<br/>
+            <b>Code:</b> {NHSER21CD}
+        """
+
+    base_layer = pdk.Layer(
         "GeoJsonLayer",
-        geo_df,
+        geojson_data,
         pickable=True,
+        stroked=True,
         filled=True,
-        get_fill_color="fill_color",
+        get_fill_color="properties.fill_color",
         get_line_color=[255, 255, 255],
-        get_line_width=150,
+        line_width_min_pixels=1,
     )
+    map_layers.append(base_layer)
 
-    # Layer 2: Dots
-    dot_layer = pdk.Layer(
-        "ScatterplotLayer",
-        nhs_trusts_data,
-        get_position=['long', 'lat'],
-        get_color=[255, 255, 255, 255], # Solid white dots
-        get_radius=100,
-        radius_min_pixels=4,
-        pickable=True,
-    )
+    # 2. Add CDC Dots if enabled
+    #if show_cdc_dots:
+    #    dots_df = get_cdc_dots()
+    #    dots_layer = pdk.Layer(
+    #        "ScatterplotLayer",
+    #        dots_df,
+    #        get_position=["lon", "lat"],
+    #        get_color=[255, 255, 255, 200],
+    #        get_radius=8000,
+    #        pickable=True,
+    #    )
+    #    map_layers.append(dots_layer)
+
+    #  2. Add NHS Trust Dots if enabled
+    if show_nhs_trust_dots:
+        dots_df2 = get_nhs_trust_dots()
+        dots_layer2 = pdk.Layer(
+            "ScatterplotLayer",
+            dots_df2,
+            get_position=["lon", "lat"],
+            get_color=[255, 255, 255, 200],
+            get_radius=8000,
+            pickable=True,
+        )
+        map_layers.append(dots_layer2)
 
     # --- MAP VIEW ---
     view_state = pdk.ViewState(
@@ -117,7 +208,7 @@ try:
 
     # --- RENDER ---
     st.pydeck_chart(pdk.Deck(
-        layers=[region_layer, dot_layer],
+        layers=[base_layer, dots_layer2],
         initial_view_state=view_state,
         height=800, 
         tooltip={
@@ -133,11 +224,11 @@ try:
         }
     ))
     # --- DATA TABLES ---
-    st.divider()
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Region List")
-        st.dataframe(geo_df[['NHSER21NM']], width='stretch')
+    #st.divider()
+    #col1, col2 = st.columns(2)
+    #with col1:
+    #    st.subheader("Region/ICB List")
+    #    st.dataframe(geojson_data[['NHSER21NM']], width='stretch')
     #with col2:
     #    st.subheader("Facility List")
     #    st.dataframe(dot_df[['site_name', 'status', 'staff_count']], width='stretch')

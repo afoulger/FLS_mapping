@@ -28,6 +28,11 @@ nhs_trusts_table = dl.create_nhs_trusts_table(nhs_trusts_data, dexa_data_2425, c
 #Create ICB level table
 icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, icbs_summary)
 
+#Create ICBs code mapping
+icbs_code_mapping = dl.load_icbs_code_mapping('Data/code_mapping.csv')
+
+st.write(icbs_code_mapping)
+
 #Create Region level table
 regions_summary, regions_data = dl.create_region_level_table(nhs_trusts_table, regions_data)
 

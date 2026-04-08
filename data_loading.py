@@ -61,7 +61,7 @@ def merge_data(df, df_orig, left_merge_col, merge_col, second_col, new_col_names
 def load_regions_data(filepath): 
        #Add regions data
        regions_data = grab_clean_df(filepath)
-       regions_data = regions_data[['organisation_code', 'name', 'address_line_1', 'address_line_2', 'address_line_3', 'address_line_4', 'address_line_5', 'postcode', 'open_date', 'close_date', 'lat', 'long']]
+       regions_data = regions_data[['organisation_code', 'name', 'open_date', 'close_date', 'lat', 'long']]
        regions_data = regions_data.rename(columns = {'organisation_code':'region_code','name':'region_name'})
 
        regions_data = regions_data[regions_data.region_name.str.contains('COMMISSIONING REGION')]
@@ -91,6 +91,12 @@ def load_icbs_data(filepath):
        icbs_summary = icbs_summary.drop(columns = ['index'])
 
        return icbs_data, icbs_summary
+
+def load_icbs_code_mapping(filepath):
+       icbs_code_mapping = grab_clean_df(filepath)
+       icbs_code_mapping = icbs_code_mapping[['icb24cd', 'icb24cdh']].drop_duplicates()
+
+       return icbs_code_mapping
 
 def load_nhs_trusts_data(filepath):
 
