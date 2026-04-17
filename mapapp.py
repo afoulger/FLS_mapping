@@ -166,7 +166,7 @@ try:
     # 1. Select the Base GeoJSON Layer based on Radio Button
     if map_mode == "ICB Boundaries":
         geojson_data = load_icb_data()
-        st.write("This is ICB data")
+        st.write("This is a map of ICB data")
     else:
         geojson_data = load_region_data()
 
