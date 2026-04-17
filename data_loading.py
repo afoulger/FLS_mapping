@@ -61,7 +61,7 @@ def merge_data(df, df_orig, left_merge_col, merge_col, second_col, new_col_names
 def load_regions_data(filepath): 
        #Add regions data
        regions_data = grab_clean_df(filepath)
-       regions_data = regions_data[['organisation_code', 'name', 'open_date', 'close_date', 'lat', 'long']]
+       regions_data = regions_data[['organisation_code', 'name', 'open_date', 'close_date', 'lat', 'lon']]
        regions_data = regions_data.rename(columns = {'organisation_code':'region_code','name':'region_name'})
 
        regions_data = regions_data[regions_data.region_name.str.contains('COMMISSIONING REGION')]
@@ -76,7 +76,7 @@ def load_icbs_data(filepath):
    
        #Add ICBs data
        icbs_data = grab_clean_df(filepath)
-       icbs_data = icbs_data[['national_grouping', 'high_level_health_geography', 'name','address_line_1', 'address_line_2', 'address_line_3', 'address_line_4', 'address_line_5', 'postcode', 'open_date', 'close_date', 'lat', 'long']]
+       icbs_data = icbs_data[['national_grouping', 'high_level_health_geography', 'name','address_line_1', 'address_line_2', 'address_line_3', 'address_line_4', 'address_line_5', 'postcode', 'open_date', 'close_date', 'lat', 'lon']]
        icbs_data = icbs_data.rename(columns = {'national_grouping':'region_code','high_level_health_geography':'icb_code', 'name':'icb_name'})
 
        icbs_data = icbs_data[icbs_data.icb_name.str.contains(' ICB ')]
@@ -102,7 +102,7 @@ def load_nhs_trusts_data(filepath):
 
        #Add NHS Trusts data
        nhs_trusts_data = grab_clean_df(filepath)
-       nhs_trusts_data = nhs_trusts_data[['organisation_code', 'name', 'national_grouping', 'high_level_health_geography','address_line_1', 'address_line_2', 'address_line_3', 'address_line_4', 'address_line_5', 'postcode', 'open_date', 'close_date', 'lat', 'long']]
+       nhs_trusts_data = nhs_trusts_data[['organisation_code', 'name', 'national_grouping', 'high_level_health_geography','address_line_1', 'address_line_2', 'address_line_3', 'address_line_4', 'address_line_5', 'postcode', 'open_date', 'close_date', 'lat', 'lon']]
        nhs_trusts_data = nhs_trusts_data.rename(columns = {'organisation_code':'trust_code','name':'trust_name', 'national_grouping':'region_code', 'high_level_health_geography':'icb_code'})
 
        nhs_trusts_data = nhs_trusts_data[nhs_trusts_data['close_date'].isnull()].reset_index()

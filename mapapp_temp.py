@@ -8,34 +8,34 @@ import data_loading as dl
 
 st.set_page_config(page_title="Example Map: Regions", layout="wide")
 
-st.title("NHS Mapping Tool: ICB & Regional Views")
+st.title("NHS FLS Mapping Tool: ICB & Regional Views")
 
-# -- Load all datasets -- 
+# -- Load all datasets --
 
-#Load DEXA data
+# Load DEXA data
 dexa_data_2425, dexa_count_2425 = dl.load_dexa_data('Data/National-Imaging-Data-Collection-Asset-Count-2024-25-v1-FINAL.csv', skiprows=13)  
 
-#Load CDC data
+# Load CDC data
 cdcs = dl.load_cdc_data('Data/CDCs.csv')
 
-#Load regions, ICBs and NHS Trusts data
+# Load regions, ICBs and NHS Trusts data
 regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
 icbs_data, icbs_summary = dl.load_icbs_data('Data/ICBs_eccg_inc_headers.csv')
 nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
 
-#Create CDCs Trust level data
+# Create CDCs Trust level data
 cdcs_trust_level = dl.create_trust_level_cdc_data(cdcs)
 
-#Create NHS Trusts table 
+# Create NHS Trusts table 
 nhs_trusts_table = dl.create_nhs_trusts_table(nhs_trusts_data, dexa_data_2425, cdcs_trust_level)
 
-#Create ICB level table
+# Create ICB level table
 icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, icbs_summary)
 
-#Create ICBs code mapping
+# Create ICBs code mapping
 icbs_code_mapping = dl.load_icbs_code_mapping('Data/code_mapping.csv')
 
-#Create Region level table
+# Create Region level table
 regions_summary, regions_data = dl.create_region_level_table(nhs_trusts_table, regions_data)
 
 
@@ -68,7 +68,7 @@ with st.sidebar:
         **Version:** 1.0.4  
         **Last Updated:** April 2026
                     
-        **Contact**: anne.foulger@dhsc.gov.uk
+        **Contact**: NAME/EMAIL HERE
         """)
 
 @st.cache_data
@@ -116,19 +116,14 @@ def load_region_data():
         "North East and Yorkshire": [0, 206, 209, 100]
     }
     
-    #merge regions data and regions geojson 
+    # Merge regions data and regions geojson 
     geo_df = geo_df.merge(regions_data, left_on=geo_df['NHSER21NM'].str.upper(), right_on='region_name', how='left')
 
-    # Apply colors 
-    #geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
-
-    geo_df['fill_color'] = [     
-        [0, 206, 209, 100] if count > 20 else [255, 215, 0, 100]     
-        for count in geo_df['dexa_count_2425'] ]
- 
+    # Apply colors
+    geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
 
     # Fill missing with grey
-    #geo_df['fill_color'] = geo_df['fill_color'].apply(lambda x: x if isinstance(x, list) else [200, 200, 200, 100])
+    geo_df['fill_color'] = geo_df['fill_color'].apply(lambda x: x if isinstance(x, list) else [200, 200, 200, 100])
     
     # Create a dedicated tooltip column for regions
     geo_df['tooltip_text'] = (
@@ -142,17 +137,20 @@ def load_region_data():
     
 @st.cache_data
 def get_cdc_dots():
- 
     # Create a dedicated tooltip column for dots
     cdcs['tooltip_text'] = (
         "<b>CDC Name:</b> " + cdcs['name_of_cdc'].astype(str)
         )
+    
+    # REMOVE WHEN LAT AND LONG ARE ADDED INTO DATA
+    # make a fake lat/long columns, this will put them all in one place just to check interactivity
+    cdcs['lat'] = 53.8008
+    cdcs['long'] = 1.5491
 
     return pd.DataFrame(cdcs)
 
 @st.cache_data
 def get_nhs_trust_dots():
- 
     # Create a dedicated tooltip column for dots
     nhs_trusts_data['tooltip_text'] = (
         "<b>Trust Name:</b> " + nhs_trusts_data['trust_name'].astype(str)
@@ -160,13 +158,14 @@ def get_nhs_trust_dots():
 
     return pd.DataFrame(nhs_trusts_data)
 
+
+
 try:
     map_layers = []
 
     # 1. Select the Base GeoJSON Layer based on Radio Button
     if map_mode == "ICB Boundaries":
         geojson_data = load_icb_data()
-        st.write("This is ICB data")
     else:
         geojson_data = load_region_data()
 
@@ -188,7 +187,7 @@ try:
         dots_layer = pdk.Layer(
             "ScatterplotLayer",
             dots_df,
-            get_position=["lon", "lat"],
+            get_position=["long", "lat"],
             get_color=[255, 14, 203, 240], # CDC dots colour
             get_radius=10000,
             radius_min_pixels=3,  # Prevents dots from disappearing when zooming out
@@ -203,7 +202,7 @@ try:
         dots_layer2 = pdk.Layer(
             "ScatterplotLayer",
             dots_df2,
-            get_position=["lon", "lat"],
+            get_position=["long", "lat"],
             get_color=[255, 255, 255, 200], # Trust dots colour
             get_radius=4000,
             radius_min_pixels=3,  # Prevents dots from disappearing when zooming out
