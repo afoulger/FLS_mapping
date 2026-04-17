@@ -207,7 +207,4 @@ marimo/_lsp/
 __marimo__/
 
 # Non-public datasets
-Data/FLS_List_2024.csv
-Data/Neighbourhood_Health_areas.csv
-Data/NHS_Trusts.csv
 .vscode
