@@ -21,6 +21,7 @@ cdcs = dl.load_cdc_data('Data/CDCs.csv')
 #Load regions, ICBs and NHS Trusts data
 regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
 icbs_data, icbs_summary = dl.load_icbs_data('Data/ICBs_eccg_inc_headers.csv')
+icb_pop = dl.load_icb_pop(('Data/Mid_2024_ICB_populations.csv'))
 nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
 
 #Create CDCs Trust level data
@@ -35,9 +36,11 @@ icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, ic
 #Create ICBs code mapping
 icbs_code_mapping = dl.load_icbs_code_mapping('Data/code_mapping.csv')
 
+#Create aggregated ICB population table
+icb_pop_agg = dl.create_icb_pop_agg(icb_pop)
+
 #Create Region level table
 regions_summary, regions_data = dl.create_region_level_table(nhs_trusts_table, regions_data)
-
 
 # --- SIDEBAR CONTROLS ---
 with st.sidebar:
@@ -80,23 +83,40 @@ def load_icb_data():
     
     gdf = gdf.merge(icbs_code_mapping, left_on="ICB23CD", right_on="icb24cd", how="left")
     gdf = gdf.merge(icbs_summary, left_on="icb24cdh", right_on="icb_code", how="left")
+    gdf = gdf.merge(icb_pop_agg, left_on="icb24cd", right_on="icb_2024_code", how="left")
+    gdf['dexas_per_million'] = gdf["dexa_count_2425"] / gdf["total_icb_pop"] * 1000000
+    gdf['dexas_per_million'] = gdf['dexas_per_million'].round(1)
 
     # Generate random colors
-    np.random.seed(42)
-    gdf['fill_color'] = [
-        [np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 140] 
-        for _ in range(len(gdf))
+    #np.random.seed(42)
+    #gdf['fill_color'] = [
+    #    [np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 140] 
+    #    for _ in range(len(gdf))
+    #]
+
+    #Apply colors
+    gdf['fill_color'] = [     
+        [242, 242, 242, 100] if count < 1 else [32, 115, 188, 100]     
+        for count in gdf['dexas_per_million']
     ]
 
-    # Create a dedicated tooltip column for regions
+    # Create a dedicated tooltip column for ICBs
     gdf['tooltip_text'] = (
-        "<b>ICB:</b> " + gdf['icb_name'] + "<br/>"
+        "<b>ICB:</b> " + gdf['icb_name'] + "<br/>" +
+        "<b>DEXA count:</b> " + gdf['dexa_count_2425'].astype(str) + "<br/>" +
+        "<b>DEXAs per million people:</b> " + gdf['dexas_per_million'].astype(str) + "<br/>" +
+        "<b>CDC count:</b> " + gdf['cdc_count'].astype(str)
     )
 
-    return json.loads(gdf.to_json())
+    # Create regional population table
+
+    region_pop = gdf[['region_code', 'total_icb_pop']]
+    region_pop_agg = region_pop.groupby(['region_code']).agg(total_region_pop=('total_icb_pop', 'sum')).reset_index()
+
+    return json.loads(gdf.to_json()), region_pop_agg
 
 @st.cache_data
-def load_region_data():
+def load_region_data(region_pop_agg):
     # 1. Load and prepare Region Polygons
     # Ensure nhs_regions.geojson is in your root folder
     geo_df = gpd.read_file("Data/nhs_regions.geojson")
@@ -118,13 +138,17 @@ def load_region_data():
     
     #merge regions data and regions geojson 
     geo_df = geo_df.merge(regions_data, left_on=geo_df['NHSER21NM'].str.upper(), right_on='region_name', how='left')
-
+    geo_df = geo_df.merge(region_pop_agg, left_on='region_code', right_on='region_code', how='left')
+    geo_df['dexas_per_million'] = geo_df["dexa_count_2425"] / geo_df["total_region_pop"] * 1000000
+    geo_df['dexas_per_million'] = geo_df['dexas_per_million'].round(1)
+    
     # Apply colors 
     #geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
 
     geo_df['fill_color'] = [     
         [0, 206, 209, 100] if count > 20 else [255, 215, 0, 100]     
-        for count in geo_df['dexa_count_2425'] ]
+        for count in geo_df['dexa_count_2425'] 
+    ]
  
 
     # Fill missing with grey
@@ -134,6 +158,7 @@ def load_region_data():
     geo_df['tooltip_text'] = (
         "<b>Region:</b> " + geo_df['NHSER21NM'] + "<br/>" +
         "<b>DEXA count:</b> " + geo_df['dexa_count_2425'].astype(str) + "<br/>" +
+        "<b>DEXAs per million people:</b> " + geo_df['dexas_per_million'].astype(str) + "<br/>" +
         "<b>CDC count:</b> " + geo_df['cdc_count'].astype(str)
     )
 
@@ -165,10 +190,12 @@ try:
 
     # 1. Select the Base GeoJSON Layer based on Radio Button
     if map_mode == "ICB Boundaries":
-        geojson_data = load_icb_data()
-        st.write("This is a map of ICB data")
+        geojson_data, region_pop_agg = load_icb_data()
+        st.write("This map shows ICB boundaries")
     else:
-        geojson_data = load_region_data()
+        geojson_data, region_pop_agg = load_icb_data() #this is needed for regional population figures
+        geojson_data = load_region_data(region_pop_agg)
+        st.write("This map shows regional boundaries")
 
     base_layer = pdk.Layer(
         "GeoJsonLayer",
