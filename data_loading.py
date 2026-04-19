@@ -98,6 +98,19 @@ def load_icbs_code_mapping(filepath):
 
        return icbs_code_mapping
 
+def load_icb_pop(filepath):
+       icb_pop = grab_clean_df(filepath)
+       icb_pop = icb_pop.rename(columns = {'total':'total_icb_pop'})
+       icb_pop['total_icb_pop'] = icb_pop['total_icb_pop'].str.replace(',','')
+       icb_pop['total_icb_pop'] = icb_pop['total_icb_pop'].apply(pd.to_numeric, errors='coerce')
+       
+       return icb_pop
+
+def create_icb_pop_agg(icb_pop):
+       icb_pop_agg = icb_pop.groupby(['icb_2024_code']).agg(total_icb_pop=('total_icb_pop', 'sum')).reset_index()
+
+       return icb_pop_agg
+
 def load_nhs_trusts_data(filepath):
 
        #Add NHS Trusts data

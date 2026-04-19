@@ -21,6 +21,7 @@ cdcs = dl.load_cdc_data('Data/CDCs.csv')
 #Load regions, ICBs and NHS Trusts data
 regions_data = dl.load_regions_data('Data/Regions_eauth_inc_headers.csv')
 icbs_data, icbs_summary = dl.load_icbs_data('Data/ICBs_eccg_inc_headers.csv')
+icb_pop = dl.load_icb_pop(('Data/Mid_2024_ICB_populations.csv'))
 nhs_trusts_data = dl.load_nhs_trusts_data('Data/NHS_Trusts_etr_inc_headers.csv')
 
 #Create CDCs Trust level data
@@ -35,9 +36,11 @@ icb_level_summary, icbs_summary = dl.create_icb_level_table(nhs_trusts_table, ic
 #Create ICBs code mapping
 icbs_code_mapping = dl.load_icbs_code_mapping('Data/code_mapping.csv')
 
+#Create aggregated ICB population table
+icb_pop_agg = dl.create_icb_pop_agg(icb_pop)
+
 #Create Region level table
 regions_summary, regions_data = dl.create_region_level_table(nhs_trusts_table, regions_data)
-
 
 # --- SIDEBAR CONTROLS ---
 with st.sidebar:
@@ -80,23 +83,57 @@ def load_icb_data():
     
     gdf = gdf.merge(icbs_code_mapping, left_on="ICB23CD", right_on="icb24cd", how="left")
     gdf = gdf.merge(icbs_summary, left_on="icb24cdh", right_on="icb_code", how="left")
+    gdf = gdf.merge(icb_pop_agg, left_on="icb24cd", right_on="icb_2024_code", how="left")
+    gdf['dexas_per_million'] = gdf["dexa_count_2425"] / gdf["total_icb_pop"] * 1000000
+    gdf['dexas_per_million'] = gdf['dexas_per_million'].round(1)
 
     # Generate random colors
-    np.random.seed(42)
-    gdf['fill_color'] = [
-        [np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 140] 
-        for _ in range(len(gdf))
-    ]
+    #np.random.seed(42)
+    #gdf['fill_color'] = [
+    #    [np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 140] 
+    #    for _ in range(len(gdf))
+    #]
 
-    # Create a dedicated tooltip column for regions
+    #Apply colors
+    #gdf['fill_color'] = [     
+    #    [242, 242, 242, 100] if count < 1 else [32, 115, 188, 100]     
+    #    for count in gdf['dexas_per_million']
+    #]
+
+    colours =[[242, 242, 242, 255], 
+              [173, 209, 241, 255],
+              [107, 172, 230, 255],
+              [ 32, 115, 188, 255],
+              [ 18,  67, 109, 255],
+              [  9,  33,  53, 255]
+              ]
+
+
+    gdf['bin'] = pd.cut(
+        gdf["dexas_per_million"],
+        bins=[0,1,2,3,4,5,float("inf")],
+        labels=False
+        )
+
+    gdf['fill_color'] = gdf['bin'].map(lambda i: colours[int(i)] if pd.notna(i) else [255,255,255,255])
+
+    # Create a dedicated tooltip column for ICBs
     gdf['tooltip_text'] = (
-        "<b>ICB:</b> " + gdf['icb_name'] + "<br/>"
+        "<b>ICB:</b> " + gdf['icb_name'] + "<br/>" +
+        "<b>DEXA count:</b> " + gdf['dexa_count_2425'].astype(str) + "<br/>" +
+        "<b>DEXAs per million people:</b> " + gdf['dexas_per_million'].astype(str) + "<br/>" +
+        "<b>CDC count:</b> " + gdf['cdc_count'].astype(str)
     )
 
-    return json.loads(gdf.to_json())
+    # Create regional population table
+
+    region_pop = gdf[['region_code', 'total_icb_pop']]
+    region_pop_agg = region_pop.groupby(['region_code']).agg(total_region_pop=('total_icb_pop', 'sum')).reset_index()
+
+    return json.loads(gdf.to_json()), region_pop_agg
 
 @st.cache_data
-def load_region_data():
+def load_region_data(region_pop_agg):
     # 1. Load and prepare Region Polygons
     # Ensure nhs_regions.geojson is in your root folder
     geo_df = gpd.read_file("Data/nhs_regions.geojson")
@@ -106,25 +143,48 @@ def load_region_data():
         geo_df = geo_df.to_crs(epsg="4326")
     
     # Standard color mapping
-    color_map = {
-        "London": [255, 99, 71, 100],
-        "South East": [60, 179, 113, 100],
-        "South West": [30, 144, 255, 100],
-        "Midlands": [255, 165, 0, 100],
-        "East of England": [147, 112, 219, 100],
-        "North West": [255, 215, 0, 100],
-        "North East and Yorkshire": [0, 206, 209, 100]
-    }
+    #color_map = {
+    #    "London": [255, 99, 71, 100],
+    #    "South East": [60, 179, 113, 100],
+    #    "South West": [30, 144, 255, 100],
+    #    "Midlands": [255, 165, 0, 100],
+    #    "East of England": [147, 112, 219, 100],
+    #    "North West": [255, 215, 0, 100],
+    #    "North East and Yorkshire": [0, 206, 209, 100]
+    #}
     
     #merge regions data and regions geojson 
     geo_df = geo_df.merge(regions_data, left_on=geo_df['NHSER21NM'].str.upper(), right_on='region_name', how='left')
-
+    geo_df = geo_df.merge(region_pop_agg, left_on='region_code', right_on='region_code', how='left')
+    geo_df['dexas_per_million'] = geo_df["dexa_count_2425"] / geo_df["total_region_pop"] * 1000000
+    geo_df['dexas_per_million'] = geo_df['dexas_per_million'].round(1)
+    
     # Apply colors 
     #geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
 
-    geo_df['fill_color'] = [     
-        [0, 206, 209, 100] if count > 20 else [255, 215, 0, 100]     
-        for count in geo_df['dexa_count_2425'] ]
+    colours =[[242, 242, 242, 255], 
+              [173, 209, 241, 255],
+              [107, 172, 230, 255],
+              [ 32, 115, 188, 255],
+              [ 18,  67, 109, 255],
+              [  9,  33,  53, 255]
+              ]
+
+
+    geo_df['bin'] = pd.cut(
+        geo_df["dexas_per_million"],
+        bins=[0,1,2,3,4,5,float("inf")],
+        labels=False
+        )
+
+    geo_df['fill_color'] = geo_df['bin'].map(lambda i: colours[int(i)] if pd.notna(i) else [255,255,255,255])
+
+
+
+    #geo_df['fill_color'] = [     
+    #    [0, 206, 209, 100] if count > 20 else [255, 215, 0, 100]     
+    #    for count in geo_df['dexa_count_2425'] 
+    #]
  
 
     # Fill missing with grey
@@ -134,6 +194,7 @@ def load_region_data():
     geo_df['tooltip_text'] = (
         "<b>Region:</b> " + geo_df['NHSER21NM'] + "<br/>" +
         "<b>DEXA count:</b> " + geo_df['dexa_count_2425'].astype(str) + "<br/>" +
+        "<b>DEXAs per million people:</b> " + geo_df['dexas_per_million'].astype(str) + "<br/>" +
         "<b>CDC count:</b> " + geo_df['cdc_count'].astype(str)
     )
 
@@ -165,10 +226,105 @@ try:
 
     # 1. Select the Base GeoJSON Layer based on Radio Button
     if map_mode == "ICB Boundaries":
-        geojson_data = load_icb_data()
-        st.write("This is a map of ICB data")
+        geojson_data, region_pop_agg = load_icb_data()
+        
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown("**This map shows ICB Boundaries**")
+
+        with col2:
+            st.write("DEXA scanners per million population:")
+
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col3:
+          
+            legend_items = [
+                ("0.1 - 1.0", [242, 242, 242]),
+                ("1.1 - 2.0", [173, 209, 241]), 
+                ("2.1 - 3.0", [107, 172, 230])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            st.write("")
+
+        with col4: 
+            legend_items = [
+                ("3.1 - 4.0", [32, 115, 188]), 
+                ("4.1 - 5.0", [18, 67, 109]), 
+                ("5.1 or more", [9, 33, 53])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+            
+            st.write("")
+
     else:
-        geojson_data = load_region_data()
+        geojson_data, region_pop_agg = load_icb_data() #this is needed for regional population figures
+        geojson_data = load_region_data(region_pop_agg)
+       
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown("**This map shows NHS Regions**")
+
+        with col2:
+            st.write("DEXA scanners per million population:")
+
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col3:
+          
+            legend_items = [
+                ("0.1 - 1.0", [242, 242, 242]),
+                ("1.1 - 2.0", [173, 209, 241]), 
+                ("2.1 - 3.0", [107, 172, 230])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            st.write("")
+
+        with col4: 
+            legend_items = [
+                ("3.1 - 4.0", [32, 115, 188]), 
+                ("4.1 - 5.0", [18, 67, 109]), 
+                ("5.1 or more", [9, 33, 53])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+            
+            st.write("")
 
     base_layer = pdk.Layer(
         "GeoJsonLayer",
@@ -216,7 +372,7 @@ try:
     view_state = pdk.ViewState(
         latitude=52.5, 
         longitude=-1.1, 
-        zoom=5.8,
+        zoom=4.8,
         pitch=0
     )
 
