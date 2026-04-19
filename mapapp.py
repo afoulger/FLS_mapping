@@ -95,10 +95,27 @@ def load_icb_data():
     #]
 
     #Apply colors
-    gdf['fill_color'] = [     
-        [242, 242, 242, 100] if count < 1 else [32, 115, 188, 100]     
-        for count in gdf['dexas_per_million']
-    ]
+    #gdf['fill_color'] = [     
+    #    [242, 242, 242, 100] if count < 1 else [32, 115, 188, 100]     
+    #    for count in gdf['dexas_per_million']
+    #]
+
+    colours =[[242, 242, 242, 255], 
+              [173, 209, 241, 255],
+              [107, 172, 230, 255],
+              [ 32, 115, 188, 255],
+              [ 18,  67, 109, 255],
+              [  9,  33,  53, 255]
+              ]
+
+
+    gdf['bin'] = pd.cut(
+        gdf["dexas_per_million"],
+        bins=[0,1,2,3,4,5,float("inf")],
+        labels=False
+        )
+
+    gdf['fill_color'] = gdf['bin'].map(lambda i: colours[int(i)] if pd.notna(i) else [255,255,255,255])
 
     # Create a dedicated tooltip column for ICBs
     gdf['tooltip_text'] = (
@@ -126,15 +143,15 @@ def load_region_data(region_pop_agg):
         geo_df = geo_df.to_crs(epsg="4326")
     
     # Standard color mapping
-    color_map = {
-        "London": [255, 99, 71, 100],
-        "South East": [60, 179, 113, 100],
-        "South West": [30, 144, 255, 100],
-        "Midlands": [255, 165, 0, 100],
-        "East of England": [147, 112, 219, 100],
-        "North West": [255, 215, 0, 100],
-        "North East and Yorkshire": [0, 206, 209, 100]
-    }
+    #color_map = {
+    #    "London": [255, 99, 71, 100],
+    #    "South East": [60, 179, 113, 100],
+    #    "South West": [30, 144, 255, 100],
+    #    "Midlands": [255, 165, 0, 100],
+    #    "East of England": [147, 112, 219, 100],
+    #    "North West": [255, 215, 0, 100],
+    #    "North East and Yorkshire": [0, 206, 209, 100]
+    #}
     
     #merge regions data and regions geojson 
     geo_df = geo_df.merge(regions_data, left_on=geo_df['NHSER21NM'].str.upper(), right_on='region_name', how='left')
@@ -145,10 +162,29 @@ def load_region_data(region_pop_agg):
     # Apply colors 
     #geo_df['fill_color'] = geo_df['NHSER21NM'].map(color_map).fillna("[200, 200, 200, 100]")
 
-    geo_df['fill_color'] = [     
-        [0, 206, 209, 100] if count > 20 else [255, 215, 0, 100]     
-        for count in geo_df['dexa_count_2425'] 
-    ]
+    colours =[[242, 242, 242, 255], 
+              [173, 209, 241, 255],
+              [107, 172, 230, 255],
+              [ 32, 115, 188, 255],
+              [ 18,  67, 109, 255],
+              [  9,  33,  53, 255]
+              ]
+
+
+    geo_df['bin'] = pd.cut(
+        geo_df["dexas_per_million"],
+        bins=[0,1,2,3,4,5,float("inf")],
+        labels=False
+        )
+
+    geo_df['fill_color'] = geo_df['bin'].map(lambda i: colours[int(i)] if pd.notna(i) else [255,255,255,255])
+
+
+
+    #geo_df['fill_color'] = [     
+    #    [0, 206, 209, 100] if count > 20 else [255, 215, 0, 100]     
+    #    for count in geo_df['dexa_count_2425'] 
+    #]
  
 
     # Fill missing with grey
@@ -191,11 +227,104 @@ try:
     # 1. Select the Base GeoJSON Layer based on Radio Button
     if map_mode == "ICB Boundaries":
         geojson_data, region_pop_agg = load_icb_data()
-        st.write("This map shows ICB boundaries")
+        
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown("**This map shows ICB Boundaries**")
+
+        with col2:
+            st.write("DEXA scanners per million population:")
+
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col3:
+          
+            legend_items = [
+                ("0.1 - 1.0", [242, 242, 242]),
+                ("1.1 - 2.0", [173, 209, 241]), 
+                ("2.1 - 3.0", [107, 172, 230])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            st.write("")
+
+        with col4: 
+            legend_items = [
+                ("3.1 - 4.0", [32, 115, 188]), 
+                ("4.1 - 5.0", [18, 67, 109]), 
+                ("5.1 or more", [9, 33, 53])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+            
+            st.write("")
+
     else:
         geojson_data, region_pop_agg = load_icb_data() #this is needed for regional population figures
         geojson_data = load_region_data(region_pop_agg)
-        st.write("This map shows regional boundaries")
+       
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown("**This map shows NHS Regions**")
+
+        with col2:
+            st.write("DEXA scanners per million population:")
+
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col3:
+          
+            legend_items = [
+                ("0.1 - 1.0", [242, 242, 242]),
+                ("1.1 - 2.0", [173, 209, 241]), 
+                ("2.1 - 3.0", [107, 172, 230])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            st.write("")
+
+        with col4: 
+            legend_items = [
+                ("3.1 - 4.0", [32, 115, 188]), 
+                ("4.1 - 5.0", [18, 67, 109]), 
+                ("5.1 or more", [9, 33, 53])
+            ]
+
+            for label, rgb in legend_items:
+                st.markdown(
+                    f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                    f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                    f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                    f'border:1px solid #999;"></span>{label}</div>',
+                    unsafe_allow_html=True,
+                )
+            
+            st.write("")
 
     base_layer = pdk.Layer(
         "GeoJsonLayer",
@@ -243,7 +372,7 @@ try:
     view_state = pdk.ViewState(
         latitude=52.5, 
         longitude=-1.1, 
-        zoom=5.8,
+        zoom=4.8,
         pitch=0
     )
 
