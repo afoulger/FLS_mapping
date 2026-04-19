@@ -30,6 +30,7 @@ def load_cdc_data(filepath):
        
        cdcs = grab_clean_df(filepath, skiprows=1)
        cdcs['host_trust'] = cdcs['host_trust'].str.strip()
+       cdcs = cdcs[['region','icb','cdc_ods_site_code','name_of_cdc','host_trust','updated_nhs_trust_name','cdc_trust_code','location','post_code_for_permanent_approved_site','lat','lon']]
 
        return cdcs
 
@@ -176,3 +177,65 @@ def create_region_level_table(nhs_trusts_table, regions_data):
        regions_data = regions_data.merge(regions_summary, on='region_code', how='left')
 
        return regions_summary, regions_data
+
+def apply_colours(df): 
+       colours =[[242, 242, 242, 255], 
+              [173, 209, 241, 255],
+              [107, 172, 230, 255],
+              [ 32, 115, 188, 255],
+              [ 18,  67, 109, 255],
+              [  9,  33,  53, 255]
+              ]
+
+       df['bin'] = pd.cut(
+              df["dexas_per_million"],
+              bins=[0,1,2,3,4,5,float("inf")],
+              labels=False
+              )
+
+       df['fill_colour'] = df['bin'].map(lambda i: colours[int(i)] if pd.notna(i) else [255,255,255,255])
+
+       return df
+
+def create_legend():
+       
+       col1, col2, col3, col4 = st.columns(4)
+        
+       with col3:
+           
+              legend_items = [
+                     ("0.1 - 1.0", [242, 242, 242]),
+                     ("1.1 - 2.0", [173, 209, 241]), 
+                     ("2.1 - 3.0", [107, 172, 230])
+              ]
+
+              for label, rgb in legend_items:
+                     st.markdown(
+                            f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                            f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                            f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                            f'border:1px solid #999;"></span>{label}</div>',
+                            unsafe_allow_html=True,
+                     )
+
+              st.write("")
+
+       with col4: 
+              legend_items = [
+                     ("3.1 - 4.0", [32, 115, 188]), 
+                     ("4.1 - 5.0", [18, 67, 109]), 
+                     ("5.1 or more", [9, 33, 53])
+              ]
+
+              for label, rgb in legend_items:
+                     st.markdown(
+                            f'<div style="display:flex;align-items:center;margin:4px 0;">'
+                            f'<span style="background:rgb({rgb[0]},{rgb[1]},{rgb[2]});'
+                            f'width:16px;height:16px;display:inline-block;margin-right:8px;'
+                            f'border:1px solid #999;"></span>{label}</div>',
+                            unsafe_allow_html=True,
+                     )
+            
+              st.write("")
+
+       return
